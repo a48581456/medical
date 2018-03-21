@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.UserDao">
+
+	<select id="getUserInfo" resultType="parameter.UserBean">
+		select * from ut_user where user_id = #{userId} and delete_flag = '0'
+	</select>
+	
+	<select id="getPatientInfo" resultType="parameter.PatientBean">
+		select * from ut_patient where patient_id = #{patientId} and delete_flag = '0'
+	</select>
+
+	<insert id="addUserInfo">
+		insert into ut_user (user_id, user_name, user_password, regis_tel, delete_flag, create_user, create_date, update_user, update_date, status, permiss, login_status) 
+		values (#{user.user_id}, #{user.user_id}, #{user.user_password}, #{user.user_id}, '0', #{user.user_id}, now(), #{user.user_id}, now(), '3', '1', '1')
+	</insert>
+
+	<select id="getAllUserInfoList" resultType="parameter.UserBean">
+		select t.*, t1.name as departmentName, t2.name as statusName, t3.name as permissName from ut_user t
+		left join ut_department t1
+		on t.departmentid = t1.id
+		left join ut_status t2
+		on t.status = t2.id
+		left join ut_permissions t3
+		on t.permiss = t3.id
+		<where>
+			and t.delete_flag='0'
+			<if test='user.user_id!=null and user.user_id!=""'>
+			and user_id=#{user.user_id}
+			</if>
+			<if test='user.user_name!=null and user.user_name!=""'>
+			and user_name like '%'||#{user.user_name}||'%'
+			</if>
+			<if test='user.name!=null and user.name!=""'>
+			and t.name like '%'||#{user.name}||'%'
+			</if>
+			<if test='user.regis_tel!=null and user.regis_tel!=""'>
+			and regis_tel=#{user.regis_tel}
+			</if>
+			<if test='user.departmentid!=null and user.departmentid!=""'>
+			and departmentid=#{user.departmentid}
+			</if>
+			<if test='user.status!=null and user.status!=""'>
+			and status=#{user.status}
+			</if>
+			<choose>
+				<when test="user.permiss!=null and user.permiss!=''">
+					and permiss=#{user.permiss}
+				</when>
+				<otherwise>
+					and t.permiss in ('1', '2', '5')
+				</otherwise>
+			</choose>
+		</where>
+		order by status, permiss, user_id
+	</select>
+
+	
+	<insert id="addUserForAdmin">
+		insert into ut_user (user_id, user_name, user_password, mail, name, regis_tel, card_id, status, permiss, departmentid, delete_flag, create_user, create_date, update_user, update_date, login_status, hospital,sex,age,title,token) 
+		values (#{user.user_id}, #{user.user_name}, #{user.user_password}, #{user.mail}, #{user.name}, #{user.regis_tel}, #{user.card_id}, '2', '1', #{user.departmentid}, '0', #{user.user_id}, now(), #{user.user_id}, now(), '1', #{user.hospital}, #{user.sex}, #{user.age}, #{user.title}, #{user.token})
+	</insert>
+
+	<update id="updUserForAdmin">
+		update ut_user set user_name = #{user.user_name}, mail = #{user.mail}, card_id = #{user.card_id}, hospital = #{user.hospital}, name = #{user.name}, regis_tel = #{user.regis_tel}, departmentid = #{user.departmentid}, update_user = #{user.update_user}, update_date = now(),img1=#{user.img1},img2=#{user.img2},img3=#{user.img3},img4=#{user.img4},sex=#{user.sex},age=#{user.age},title=#{user.title}
+		<if test='user.token!=null and user.token!=""'>
+			,token=#{user.token}
+		</if>
+		where user_id = #{user.user_id}
+	</update>
+
+	<update id="auditUserForAdmin">
+		update ut_user set status = '2', update_user = #{user.update_user}, update_date = now() where user_id = #{user.user_id}
+	</update>
+	
+	<delete id="delUserForAdmin">
+		delete from ut_user where user_id = #{user.user_id}
+	</delete>
+
+	<update id="rejectUserForAdmin">
+		update ut_user set status = '3', update_user = #{user.update_user}, update_date = now()
+		where user_id = #{user.user_id}
+	</update>
+
+
+	<select id="getExpertInfo" resultType="parameter.ExpertBean">
+		select t.expert_id, t.status,t.line_up_penson,t.coprofile,t.comment,t2.hospital,t2.name as expert_name, t1.name as departmentName, t2.pic_path as photoPath, t.order_id from ut_expert t
+		left join ut_user t2
+		on t.expert_id = t2.user_id
+		left join ut_department t1
+		on t2.departmentid = t1.id
+		where expert_id = #{expertId} and t.delete_flag = '0'
+	</select>
+
+
+	<resultMap id="expertSchedu" type="parameter.ExpertBean">
+        <id property="expert_id" column="expert_id" />
+        <id property="departmentid" column="departmentid" />
+        <id property="expert_name" column="expert_name" />
+        <id property="flag" column="flag" />
+        <collection property="scheduBeanList" ofType="parameter.ScheduBean">
+            <result property="schedu_date" column="schedu_date" />
+            <result property="delete_flag" column="delete_flag" />
+        </collection>
+    </resultMap>
+
+    <!--resultMap的值为上面resultMap的id。 -->
+    <select id="getExpertScheduList" resultMap="expertSchedu">
+    	select t.expert_id,t3.departmentid, t3.name as expert_name, schedu_date, t2.delete_flag as delete_flag from ut_expert t
+		left join ut_expert_scheduling t2
+		 on t.expert_id = t2.expert_id
+		left join ut_user t3
+		 on t.expert_id = t3.user_id
+		<where>
+			and t.delete_flag='0'
+			<if test='expert.expert_id!=null and expert.expert_id!=""'>
+			and t.expert_id=#{expert.expert_id}
+			</if>
+			<if test='expert.expert_name!=null and expert.expert_name!=""'>
+			and t3.name like '%'||#{expert.expert_name}||'%'
+			</if>
+			<if test='expert.departmentid!=null and expert.departmentid!=""'>
+			and t3.departmentid=#{expert.departmentid}
+			</if>
+			<if test='expert.flag!=null and expert.flag!=""'>
+			and t.flag=#{expert.flag}
+			</if>
+		</where>
+		order by cast(order_id as integer) desc,expert_id
+    </select>
+	
+
+	<select id="getAllExpertInfoList" resultType="parameter.ExpertBean" >
+		select t.expert_id, t.status,t.line_up_penson,t.coprofile,t.comment,t2.hospital,t2.name as expert_name, t1.name as departmentName, t2.pic_path as photoPath, t2.login_status as onloginStatus, t3.name as title from ut_expert t
+		left join ut_user t2
+		on t.expert_id = t2.user_id
+		left join ut_department t1
+		on t2.departmentid = t1.id
+		left join ut_title t3
+		on t2.title = t3.id
+		<where>
+			and t.delete_flag='0'
+			<if test='expert.expert_id!=null and expert.expert_id!=""'>
+			and expert_id=#{expert.expert_id}
+			</if>
+			<if test='expert.expert_name!=null and expert.expert_name!=""'>
+			and t2.name like '%'||#{expert.expert_name}||'%'
+			</if>
+			<if test='expert.departmentid!=null and expert.departmentid!=""'>
+			and t2.departmentid=#{expert.departmentid}
+			</if>
+			<if test='expert.status!=null and expert.status!=""'>
+			and t2.login_status=#{expert.status}
+			</if>
+			<if test='expert.show_flag!=null and expert.show_flag!=""'>
+			and t.show_flag=#{expert.show_flag}
+			</if>
+			<if test='expert.flag!=null and expert.flag!=""'>
+			and t.flag=#{expert.flag}
+			</if>
+			<if test='expert.title!=null and expert.title!=""'>
+			and t2.title=#{expert.title}
+			</if>
+		</where>
+		order by cast(order_id as integer) desc,expert_id
+	</select>
+	
+	<select id="getMainExpertInfoList" resultType="parameter.ExpertBean">
+		select t.expert_id, t.status,t.line_up_penson,t.coprofile,t.comment,t2.hospital,t2.name as expert_name, t1.name as departmentName, t2.pic_path as photoPath, t2.login_status as onloginStatus, t3.name as title from ut_expert t
+		left join ut_user t2
+		on t.expert_id = t2.user_id
+		left join ut_department t1
+		on t2.departmentid = t1.id
+		left join ut_title t3
+		on t2.title = t3.id
+		where t.delete_flag='0' and t.show_flag = '1'
+		order by cast(t.order_id as integer) desc,t.expert_id
+	</select>
+	
+	<update id="updPermissForAdmin">
+		update ut_user set permiss = #{user.permiss}, update_user = #{user.update_user}, update_date = now()
+		where user_id = #{user.user_id}
+	</update>
+
+	<insert id="addExpertForAdmin">
+		insert into ut_expert (expert_id, expert_name, status, line_up_penson, departmentid,coprofile, comment, hospital, delete_flag, create_user, create_date, update_user, update_date,flag,order_id) 
+		values (#{expert.expert_id}, #{expert.expert_name}, '1', '0', #{expert.departmentid}, #{expert.coprofile}, #{expert.comment}, #{expert.hospital}, '0', #{expert.create_user}, now(), #{expert.update_user}, now(),#{expert.flag},#{expert.order_id})
+	</insert>
+	
+	<update id="updExpertForAdmin">
+		update ut_expert set coprofile =#{expert.coprofile}, comment = #{expert.comment},hospital = #{expert.hospital}, update_user = #{expert.update_user}, order_id = #{expert.order_id}, update_date = now()
+		where expert_id = #{expert.expert_id}
+	</update>
+
+	<update id="updExpertStaForAdmin">
+		update ut_expert set status = #{expert.status}, update_user = #{expert.update_user}, update_date = now()
+		where expert_id = #{expert.expert_id}
+	</update>
+	
+	<update id="updExpertSchedulingForAdmin">
+		update ut_expert set expert_scheduling = #{expert.expert_scheduling}, update_user = #{expert.update_user}, update_date = now()
+		where expert_id = #{expert.expert_id}
+	</update>
+	
+	<delete id="delExpertForAdmin">
+		delete from ut_expert where expert_id = #{expert.expert_id}
+	</delete>
+	
+	<select id="getScheduInfo" resultType="parameter.ScheduBean">
+		select * from ut_expert_scheduling
+		where expert_id = #{schedu.expert_id} and schedu_date = #{schedu.schedu_date}
+	</select>
+	
+	<insert id="addSchedu">
+		insert into ut_expert_scheduling (expert_id, schedu_date, delete_flag, create_user, create_date, update_user, update_date) 
+		values (#{schedu.expert_id}, #{schedu.schedu_date}, '0', #{schedu.create_user}, now(), #{schedu.update_user}, now())
+	</insert>
+	
+	<delete id="delSchedu">
+		delete from ut_expert_scheduling where expert_id = #{schedu.expert_id} and schedu_date = #{schedu.schedu_date}
+	</delete>
+	
+	<update id="updUserFront">
+		update ut_user set name = #{user.name},pic_path =#{user.pic_path}, mail =#{user.mail},
+		card_id =#{user.card_id}, departmentid =#{user.departmentid}, hospital =#{user.hospital}, update_user = #{user.update_user}, update_date = now(),img1=#{user.img1},img2=#{user.img2},img3=#{user.img3},img4=#{user.img4},sex=#{user.sex},age=#{user.age},title=#{user.title}
+		where user_id = #{user.user_id}
+	</update>
+	
+	<update id="updPatientFront">
+		update ut_patient set name=#{patient.name},sex=#{patient.sex},age=#{patient.age},mail=#{patient.mail},
+						      <if test='patient.card_id!=null and patient.card_id!=""'>
+								card_id=#{patient.card_id},
+						      </if>
+						      <if test='patient.diseasetypeid!=null and patient.diseasetypeid!=""'>
+								diseasetypeid=#{patient.diseasetypeid},
+						      </if>
+						      <if test='patient.treatment_flag!=null and patient.treatment_flag!=""'>
+								treatment_flag=#{patient.treatment_flag},
+						      </if>
+						      <if test='patient.comment_path!=null and patient.comment_path!=""'>
+								comment_path=#{patient.comment_path},
+						      </if>
+						      <if test='patient.comment!=null and patient.comment!=""'>
+								comment=#{patient.comment},
+						      </if>
+		                      update_user = #{patient.update_user}, update_date = now()
+		 where patient_id = #{patient.patient_id}
+	</update>
+	
+	<update id="updUserRegister">
+		update ut_user set name = #{user.name},pic_path =#{user.pic_path}, mail =#{user.mail},permiss=#{user.permiss},
+		card_id =#{user.card_id}, departmentid =#{user.departmentid}, hospital =#{user.hospital}, update_user = #{user.update_user}, update_date = now(),img1=#{user.img1},img2=#{user.img2},img3=#{user.img3},img4=#{user.img4},sex=#{user.sex},age=#{user.age},title=#{user.title}, status = #{user.status}, token = #{user.token}
+		where user_id = #{user.user_id}
+	</update>
+	
+	<insert id="addPatientRegister">
+		insert into ut_patient (patient_id,name,sex,age,mail,tel,card_id,delete_flag,create_user,create_date, update_user, update_date) 
+		     values (#{user.user_id},#{user.name},#{user.sex},#{user.age},#{user.mail},#{user.regis_tel},#{user.card_id},'0',#{user.create_user},now(),#{user.create_user},now())
+	</insert>
+	
+	<select id="checkPassword" resultType="parameter.UserBean">
+		select * from ut_user
+		where user_id = #{user.user_id} and user_password = #{user.old_password}
+	</select>
+	
+	<update id="updPasswordFront">
+		update ut_user set user_password = #{user.user_password}, update_user = #{user.update_user}, update_date = now()
+		where user_id = #{user.user_id}
+	</update>
+
+	<select id="getMessageList" resultType="parameter.MessageBean">
+		select * from ut_message
+		where userid = #{message.userid}
+		order by update_date desc
+	</select>
+	
+	<select id="getMessageInfo" resultType="parameter.MessageBean">
+		select * from ut_message
+		where id = #{message.id}
+	</select>
+
+	<update id="updMessageSta">
+		update ut_message set status = '2'
+		where id = #{message.id}
+	</update>
+	
+	<insert id="addScheduApply">
+		insert into ut_schedu_apply (before_date, after_date,cause, delete_flag, create_user, create_date, update_user, update_date) 
+		values (#{scheduApply.before_date}, #{scheduApply.after_date},#{scheduApply.cause}, '0', #{scheduApply.create_user}, now(), #{scheduApply.update_user}, now())
+	</insert>
+
+	<update id="updScheduApply">
+		update ut_schedu_apply set before_date = #{scheduApply.before_date}, after_date = #{scheduApply.after_date}, cause = #{scheduApply.cause}, update_user = #{scheduApply.update_user}, update_date = now()
+		where id = #{scheduApply.id}::integer
+	</update>
+	
+	<select id="getScheduApplyList" resultType="parameter.ScheduApplyBean">
+		select * from ut_schedu_apply
+		<where>
+			and delete_flag='0'
+			<if test='scheduApply.before_date!=null and scheduApply.before_date!=""'>
+			and before_date=#{scheduApply.before_date}
+			</if>
+			<if test='scheduApply.after_date!=null and scheduApply.after_date!=""'>
+			and after_date=#{scheduApply.after_date}
+			</if>
+			<if test='scheduApply.update_user!=null and scheduApply.update_user!=""'>
+			and update_user like '%'||#{scheduApply.update_user}||'%'
+			</if>
+		</where>
+		order by update_date desc
+	</select>
+
+	<select id="getScheduApplyInfo" resultType="parameter.ScheduApplyBean">
+		select * from ut_schedu_apply
+		<where>
+			and update_user like '%'||#{scheduApply.update_user}||'%'
+			<if test='scheduApply.before_date!=null and scheduApply.before_date!=""'>
+			and before_date=#{scheduApply.before_date}
+			</if>
+			<if test='scheduApply.after_date!=null and scheduApply.after_date!=""'>
+			and after_date=#{scheduApply.after_date}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getScheduApplyInfoById" resultType="parameter.ScheduApplyBean">
+		select * from ut_schedu_apply
+		where id=#{scheduApply.id}::integer
+	</select>
+
+	<update id="deleteExpertShow">
+		update ut_expert set show_flag = '0', update_user = #{expert.update_user}, update_date = now()
+		where expert_id = #{expert.expert_id}
+	</update>
+	
+	<update id="addExpertShow">
+		update ut_expert set show_flag = '1', update_user = #{expert.update_user}, update_date = now()
+		where expert_id = #{expert.expert_id}
+	</update>
+
+</mapper>

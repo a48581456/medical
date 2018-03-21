@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC      
+"-//SPRING//DTD BEAN//EN"     
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="loginBiz" class="biz.LoginBizI">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+
+	<bean id="userBiz" class="biz.UserBizI">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+
+	<bean id="advBiz" class="biz.AdvBizI">
+		<property name="advDao" ref="advDao"></property>
+	</bean>
+	
+	<bean id="expertBiz" class="biz.ExpertBizI">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	
+	<bean id="personCenterBiz" class="biz.PersonCenterBizI">
+		<property name="personCenterDao" ref="personCenterDao"></property>
+	</bean>
+
+</beans>

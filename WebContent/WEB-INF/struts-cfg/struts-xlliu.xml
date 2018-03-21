@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC  
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"  
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="login" extends="struts-default" namespace="/">
+	
+		<default-action-ref name="mainAction"></default-action-ref>
+		<action name="login">
+			<result>/login.jsp</result>
+		</action>
+		
+		<action name="loginAction" class="loginAction">
+			<result>/login.jsp</result>
+			<result name="main" type="redirectAction">mainAction</result>
+			<result name="fail">/login.jsp</result>
+			<result name="login">/login.jsp</result>
+			<result name="registerFail">/register.jsp</result>
+			<result name="retrieveFail">/retrieve.jsp</result>
+			<result name="grid">/identityGrid.jsp</result>
+			<result name="updUserRegister">/basicInfo.jsp</result>
+			<result name="updPatientRegister">/patientBasicInfo.jsp</result>
+			<result name="json">/json.jsp</result>
+		</action>
+		
+		<action name="userAction" class="userAction">
+			<result name="userList">/system/user/user.jsp</result>
+			<result name="addUser">/system/user/user_add.jsp</result>
+			<result name="updUser">/system/user/user_upd.jsp</result>
+			<result name="detailUser">/system/user/user_detail.jsp</result>
+			<result name="modalList">/system/expert/user_search.jsp</result>
+			<result name="searchUser">/personCenter/basicInfo.jsp</result>
+			<result name="searchPatient">/personCenter/patientBasicInfo.jsp</result>
+			<result name="messageList">/personCenter/messageList.jsp</result>
+			<result name="messageInfo">/personCenter/messageInfo.jsp</result>
+			<result name="updPassword">/personCenter/updPassword.jsp</result>
+			<result name="updUserRegister">/basicInfo.jsp</result>
+		</action>
+
+		
+		<action name="expertAction" class="expertAction">
+			<result name="expertList">/system/expert/expert.jsp</result>
+			<result name="addExpert">/system/expert/expert_add.jsp</result>
+			<result name="updExpert">/system/expert/expert_upd.jsp</result>
+			<result name="detailExpert">/system/expert/expert_detail.jsp</result>
+			<result name="expertSchedu">/system/expert/expert_scheduling.jsp</result>
+			<result name="expertScheduUser">/system/expert/expert_scheduling_user.jsp</result>
+			<result name="expertScheduFront">/expert/expert_scheduling.jsp</result>
+			<result name="expertFrontList">/expert/expert.jsp</result>
+			<result name="detailFrontInfo">/expert/expert_detail.jsp</result>
+			<result name="scheduApply">/expert/expert_schedu_apply.jsp</result>
+			<result name="scheduApplyList">/system/expert/expert_apply_list.jsp</result>
+			<result name="scheduApplyDetail">/system/expert/expert_apply_detail.jsp</result>
+			<result name="expertShowList">/system/expert/expertShow.jsp</result>
+			<result name="diaShowList">/system/expert/expertShowSearch.jsp</result>
+			<result name="userIm">/web_im/web_im_user.jsp</result>
+		</action>
+	</package>
+</struts>

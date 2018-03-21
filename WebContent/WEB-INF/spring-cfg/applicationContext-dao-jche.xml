@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC      
+"-//SPRING//DTD BEAN//EN"     
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="newsDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.NewsDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="technologyDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.TechnologyDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="achievementsDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.AchievementsDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="curriculumDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.CurriculumDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="literatureDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.LiteratureDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+		<bean id="drugsDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.DrugsDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+			<bean id="apparatusDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.ApparatusDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

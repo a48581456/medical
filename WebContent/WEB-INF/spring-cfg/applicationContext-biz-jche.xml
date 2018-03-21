@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC      
+"-//SPRING//DTD BEAN//EN"     
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="newsBiz" class="biz.NewsBizI">
+		<property name="newsDao" ref="newsDao"></property>
+	</bean>
+	<bean id="technologyBiz" class="biz.TechnologyBizI">
+		<property name="technologyDao" ref="technologyDao"></property>
+	</bean>
+	<bean id="achievementsBiz" class="biz.AchievementsBizI">
+		<property name="achievementsDao" ref="achievementsDao"></property>
+	</bean>
+	<bean id="curriculumBiz" class="biz.CurriculumBizI">
+		<property name="curriculumDao" ref="curriculumDao"></property>
+	</bean>
+	<bean id="literatureBiz" class="biz.LiteratureBizI">
+		<property name="literatureDao" ref="literatureDao"></property>
+	</bean>
+		<bean id="drugsBiz" class="biz.DrugsBizI">
+		<property name="drugsDao" ref="drugsDao"></property>
+	</bean>
+		<bean id="apparatusBiz" class="biz.ApparatusBizI">
+		<property name="apparatusDao" ref="apparatusDao"></property>
+	</bean>
+</beans>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<bean id="introductionAction" class="action.IntroductionAction" scope="prototype">
+		<property name="introductionBiz" ref="introductionBiz"></property>
+	</bean>
+	<bean id="storyAction" class="action.StoryAction" scope="prototype">
+		<property name="storyBiz" ref="storyBiz"></property>
+	</bean>
+	<bean id="topicAction" class="action.TopicAction" scope="prototype">
+		<property name="topicBiz" ref="topicBiz"></property>
+	</bean>
+	<bean id="remoteAction" class="action.RemoteAction" scope="prototype">
+		<property name="remoteBiz" ref="remoteBiz"></property>
+	</bean>
+	<bean id="patentAction" class="action.PatentAction" scope="prototype">
+		<property name="patentBiz" ref="patentBiz"></property>
+	</bean>
+	<bean id="searchAction" class="action.SearchAction" scope="prototype">
+		<property name="searchBiz" ref="searchBiz"></property>
+	</bean>
+
+</beans>

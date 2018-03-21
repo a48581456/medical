@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Medical</display-name>
+  <filter>
+    <filter-name>TimeOutFilter</filter-name>
+    <filter-class>filter.TimeOutFilter</filter-class>
+    <init-param>
+      <param-name>timeoutpath</param-name>
+      <param-value>/timeout.jsp</param-value>
+    </init-param>
+    <init-param>
+      <param-name>pathRoot</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sessionFlag</param-name>
+      <param-value>com.ichengsi.filter.timeoutfilter</param-value>
+    </init-param>
+    <init-param>
+      <param-name>timeout</param-name>
+      <param-value>
+				*.js, *.css, *.swf, *.jpg, image/, csjs/, loginAction, loginAction.*, loginAction!*, login.jsp, register.jsp, retrieve.jsp, basicInfo.jsp, mainAction, mainAction.*, mainAction!*
+			</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>TimeOutFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>encode</filter-name>
+    <filter-class>filter.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encode</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>struts2</filter-name>
+    <filter-class>
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>
+			struts-default.xml,struts-plugin.xml,../struts.xml
+			
+			</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+		/WEB-INF/spring-cfg/applicationContext-*.xml
+		
+		</param-value>
+  </context-param>
+  <listener>
+    <listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+  </listener>
+  <listener>
+    <listener-class>
+			listener.ServletContextListener
+		</listener-class>
+  </listener>
+  <listener>
+    <listener-class>
+			listener.SessionListener
+		</listener-class>
+  </listener>
+  <welcome-file-list>
+<!--     <welcome-file>index.html</welcome-file> -->
+<!--     <welcome-file>index.htm</welcome-file> -->
+<!--     <welcome-file>index.jsp</welcome-file> -->
+<!--     <welcome-file>default.html</welcome-file> -->
+<!--     <welcome-file>default.htm</welcome-file> -->
+<!--     <welcome-file>default.jsp</welcome-file> -->
+    <welcome-file>mainAction.action</welcome-file>
+  </welcome-file-list>
+  <session-config>
+  	<session-timeout>30</session-timeout></session-config>
+</web-app>

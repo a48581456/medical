@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC      
+"-//SPRING//DTD BEAN//EN"     
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="policyDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.PolicyDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="videoDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.VideoDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="caseDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.CaseDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="multicenterDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.MulticenterDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="educationDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="dao.EducationDao"/>
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

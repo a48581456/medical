@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.CommonDao">
+
+	<select id="getDepartmentList" resultType="bean.CodeBean">
+		select * from ut_department where delete_flag = '0'
+	</select>
+	
+	<select id="getDepartmentPageList" resultType="bean.CodeBean">
+		select * from ut_department where delete_flag = '0'
+	</select>
+	
+	<select id="getStatusList" resultType="bean.CodeBean">
+		select * from ut_status where delete_flag = '0'
+	</select>
+	
+	<select id="getCaseStatusList" resultType="bean.CodeBean">
+		select * from ut_case_status where delete_flag = '0'
+	</select>
+	
+	<select id="getPermissList" resultType="bean.CodeBean">
+		select * from ut_permissions where delete_flag = '0'
+	</select>
+	
+	<select id="getUploadTypeList" resultType="bean.CodeBean">
+		select * from ut_upload_type where delete_flag = '0'
+	</select>
+	
+	<select id="getDiseaseTypeList" resultType="bean.CodeBean">
+		select * from ut_disease where delete_flag = '0'
+	</select>
+	
+	<select id="getDiseaseTypePageList" resultType="bean.CodeBean">
+		select * from ut_disease where delete_flag = '0'
+	</select>
+	
+	<select id="getExpertList" resultType="bean.CodeBean">
+		select expert_id as id, expert_name as name, t1.pic_path as picPath from ut_expert t
+		left join ut_user t1
+		on t.expert_id = t1.user_id
+		where t.delete_flag = '0'
+	</select>
+	
+	<select id="getExpertPageList" resultType="parameter.ExpertBean">
+		select t.expert_id, t.coprofile,t.comment,t2.hospital,t2.name as expert_name, t1.name as departmentName, t2.pic_path as photoPath from ut_expert t
+		left join ut_user t2
+		on t.expert_id = t2.user_id
+		left join ut_department t1
+		on t2.departmentid = t1.id
+		where t.delete_flag='0' 
+		order by t.expert_id
+	</select>
+	
+	<select id="getHospitalList" resultType="bean.CodeBean">
+		select * from ut_hospital where delete_flag = '0'
+	</select>
+	
+	<select id="getHospitalPageList" resultType="bean.CodeBean">
+		select * from ut_hospital where delete_flag = '0'
+	</select>
+	
+	<select id="getAgeList" resultType="bean.CodeBean">
+		select * from ut_age where delete_flag = '0'
+	</select>
+	
+	<select id="getTitleList" resultType="bean.CodeBean">
+		select * from ut_title where delete_flag = '0'
+	</select>
+	
+	<select id="getCurriculumListByDate" resultType="parameter.CurriculumBean">
+		select * from ut_curriculum where delete_flag = '0' and start_date = #{date} and status = '1'
+	</select>
+	
+	<select id="getActivityListByStartDate" resultType="parameter.CaseBean">
+		select * from ut_activity where delete_flag = '0' and start_date = #{date} and status = '1'
+	</select>
+	
+	<select id="getActivityListByEndDate" resultType="parameter.CaseBean">
+		select * from ut_activity where delete_flag = '0' and end_date = #{date} and status = '2'
+	</select>
+	
+	<insert id="addMessageInfo">
+		insert into ut_message (commentid, title, functionid, link, message,userid,status, delete_flag, create_user, create_date, update_user, update_date) 
+		values (#{message.commentid}, #{message.title}, #{message.functionid}, #{message.link}, #{message.message},#{message.userid},'1', '0', #{message.create_user}, now(), #{message.update_user}, now())
+	</insert>
+	
+	<update id="updActivity">
+		update ut_activity set status = #{status}, update_date = now() where activity_id = #{id}
+	</update>
+	
+	<select id="getExpertName" resultType="String">
+		select expert_name from ut_expert where delete_flag = '0' and expert_id = #{expert}
+	</select>
+	
+	<update id="updLoginStatus">
+		update ut_user set login_status = #{status}, update_date = now() where user_id = #{userId}
+	</update>
+	
+	<select id="getAdvSuspenInfo" resultType="parameter.AdvBean">
+		select * from ut_advertising where delete_flag = '0' and pic_type = '3' order by id
+	</select>
+	
+	<select id="getCaseCount" resultType="integer">
+		 select count(*) from ut_case where delete_flag='0' and case_state='1'
+         <if test='departmentid!=null and departmentid!=""'>
+			and departmentid=#{departmentid}
+		</if>
+	</select>
+	<select id="getAchievementsCount" resultType="integer">
+		 select count(*) from ut_achievements where delete_flag='0' and achievements_state='1'
+		 <if test='departmentid!=null and departmentid!=""'>
+			and departmentid=#{departmentid}
+		</if>
+	</select>
+	<select id="getDrugsCount" resultType="integer">
+		 select count(*) from ut_drugs where delete_flag='0' and drugs_state='1'
+         <if test='departmentid!=null and departmentid!=""'>
+		  and departmentid=#{departmentid}
+		</if>
+	</select>
+		<select id="getVideoCount" resultType="integer">
+		 select count(*) from ut_video where delete_flag='0' and status='1' 
+        <if test='departmentid!=null and departmentid!=""'>
+			and departmentid=#{departmentid}
+		</if>
+	</select>
+		<select id="getPatentCount" resultType="integer">
+		 select count(*) from ut_patent where delete_flag='0' and patent_state='1' 
+          <if test='departmentid!=null and departmentid!=""'>
+			and departmentid=#{departmentid}
+		</if>
+	</select>
+	<select id="getUserCount" resultType="integer">
+		     select count(*) from ut_user where delete_flag='0' and status='1' 
+            <if test='departmentid!=null and departmentid!=""'>
+			and departmentid=#{departmentid}
+		  </if>
+	</select>
+	
+	   <select id="getNoticeType" resultType="parameter.AdvBean">
+      select type from ut_notice
+       where delete_flag = '0' 
+        order by cast(order_id as integer) desc limit 1
+     </select>
+        <select id="getNoticeContent" resultType="parameter.AdvBean">
+      select notice_content from ut_notice
+       where delete_flag = '0' 
+        order by cast(order_id as integer) desc limit 1
+     </select>
+        <select id="getNoticeId" resultType="parameter.AdvBean">
+      select notice_id from ut_notice
+       where delete_flag = '0' 
+        order by cast(order_id as integer) desc limit 1
+     </select>
+     <select id="getReserveListByEndDate" resultType="integer">
+		select reserve_id from ut_reserve where delete_flag = '0' and #{date} >= end_date and status = '1'
+	 </select>
+	 <update id="updReserve">
+		update ut_reserve set status = '3', update_date = now() where reserve_id = #{id}
+	</update>
+</mapper>

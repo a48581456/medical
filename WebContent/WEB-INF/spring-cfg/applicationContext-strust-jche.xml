@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<bean id="newsAction" class="action.NewsAction" scope="prototype">
+		<property name="newsBiz" ref="newsBiz"></property>
+	</bean>
+	<bean id="technologyAction" class="action.TechnologyAction" scope="prototype">
+		<property name="technologyBiz" ref="technologyBiz"></property>
+	</bean>
+	<bean id="achievementsAction" class="action.AchievementsAction" scope="prototype">
+		<property name="achievementsBiz" ref="achievementsBiz"></property>
+	</bean>
+	<bean id="curriculumAction" class="action.CurriculumAction" scope="prototype">
+		<property name="curriculumBiz" ref="curriculumBiz"></property>
+	</bean>
+	<bean id="literatureAction" class="action.LiteratureAction" scope="prototype">
+		<property name="literatureBiz" ref="literatureBiz"></property>
+	</bean>
+	<bean id="drugsAction" class="action.DrugsAction" scope="prototype">
+		<property name="drugsBiz" ref="drugsBiz"></property>
+	</bean>
+	<bean id="apparatusAction" class="action.ApparatusAction" scope="prototype">
+		<property name="apparatusBiz" ref="apparatusBiz"></property>
+	</bean>
+</beans>

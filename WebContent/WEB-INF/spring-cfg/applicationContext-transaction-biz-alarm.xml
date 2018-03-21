@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC      
+"-//SPRING//DTD BEAN//EN"     
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- transaction -->
+
+<!-- 	<bean id="alarmBizTransaction" -->
+<!-- 		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"> -->
+<!-- 		<property name="transactionManager" ref="transactionManager" /> -->
+<!-- 		<property name="target" ref="alarmBiz" /> -->
+<!-- 		<property name="transactionAttributes"> -->
+<!-- 			<props> -->
+<!-- 				<prop key="saveAlarm">PROPAGATION_REQUIRED</prop> -->
+<!-- 				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop> -->
+<!-- 			</props> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+</beans>
